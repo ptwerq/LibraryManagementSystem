@@ -10,14 +10,17 @@ public class LoanRecord {
     private LoanStatus status;
 
     public LoanRecord(LibraryItem item, User user, String inputToSetStatus) {
-        Long itemId = item.getId();
+        Long itemId = item.getId(); // TODO: should be class fields
         Long userId = user.getId();
         this.borrowDate = LocalDateTime.now();
-        // returnDate
+        // returnDate // TODO: shouldn't be set here, should be a class field set when returned
         setStatus(inputToSetStatus);
     }
 
-    public void setStatus(String inputToSetStatus) {
+    // return(ReturnDate)
+    // markAsOverdue()
+
+    public void setStatus(String inputToSetStatus) { // remove
         this.status = switch (inputToSetStatus.toUpperCase().trim()) {
             case "ACTIVE" -> LoanStatus.ACTIVE;
             case "RETURNED" -> LoanStatus.RETURNED;
@@ -40,7 +43,7 @@ public class LoanRecord {
 
     public void setReturnDate(LocalDateTime returnDate) {
         this.returnDate = returnDate;
-    }
+    } // remove
 
 
 }

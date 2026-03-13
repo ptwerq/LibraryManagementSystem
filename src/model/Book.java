@@ -1,6 +1,5 @@
 package model;
 
-import exception.ItemUnavailableException;
 import exception.ValidationException;
 
 public class Book extends LibraryItem {
@@ -10,8 +9,8 @@ public class Book extends LibraryItem {
     private int pages;
     private final long isbn;
 
-    public Book(String title, int year, String inputToChooseGenre, String author, int pages) {
-        super(title, year, inputToChooseGenre);
+    public Book(String title, int year, Genre genre, String author, int pages) {
+        super(title, year, genre);
         setAuthor(author);
         setPages(pages);
         this.isbn = IsbnCounter++;

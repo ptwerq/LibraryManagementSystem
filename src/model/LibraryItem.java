@@ -2,22 +2,23 @@ package model;
 
 import exception.ItemUnavailableException;
 import exception.ValidationException;
+import util.IdGenerator;
+
 import java.time.LocalDate;
 
 public abstract class LibraryItem implements Borrowable {
-    private static Long ItemIdCounter;
 
+    private final long id;
     private LoanRecord currentLoan;
-    private final Long id;
     private String title;
     private int year;
     private Genre genre;
 
-    public LibraryItem(String title, int year, String inputToChooseGenre) {
+    public LibraryItem(String title, int year, Genre genre) {
         setTitle(title);
         setYear(year);
-        setGenre(inputToChooseGenre);
-        this.id = ItemIdCounter++;
+        this.genre = genre;
+        this.id = IdGenerator.getIdForClass(LibraryItem.class);
     }
 
     @Override
@@ -57,16 +58,8 @@ public abstract class LibraryItem implements Borrowable {
         this.year = year;
     }
 
-    public void setGenre(String inputToChooseGenre) {
-      this.genre = switch(inputToChooseGenre.toUpperCase().trim()) {
-          case "FANTASY" -> Genre.FANTASY;
-          case "HISTORY" -> Genre.HISTORY;
-          case "SCIENCE" -> Genre.SCIENCE;
-          case "PROGRAMMING" -> Genre.PROGRAMMING;
-          case "FICTION" -> Genre.FICTION;
-          case "OTHER" -> Genre.OTHER;
-          default -> throw new ValidationException();
-      };
+    public void setGenre(Genre genre) {
+        this.genre = genre;
     }
 
     public Long getId() {

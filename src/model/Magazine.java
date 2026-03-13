@@ -8,8 +8,8 @@ public class Magazine extends LibraryItem {
     private final long issueNumber;
     private String publisher;
 
-    public Magazine(String title, int year, String inputToChooseGenre, String publisher) {
-        super(title, year, inputToChooseGenre);
+    public Magazine(String title, int year, Genre genre, String publisher) {
+        super(title, year, genre);
         setPublisher(publisher);
         this.issueNumber = issueNumberCounter++;
     }

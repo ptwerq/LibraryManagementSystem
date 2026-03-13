@@ -13,7 +13,7 @@ public class User {
     public User(String name, String email, String inputToChooseRole) {
         setName(name);
         setEmail(email);
-        setRole(inputToChooseRole);
+        setRole(inputToChooseRole); // TODO: fix
         this.id = UserIdCounter++;
     }
 
