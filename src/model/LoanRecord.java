@@ -1,32 +1,43 @@
 package model;
 
-import exception.ValidationException;
+import util.IdGenerator;
 
 import java.time.LocalDateTime;
 
 public class LoanRecord {
     private final LocalDateTime borrowDate;
     private LocalDateTime returnDate;
+    private final int dueDays;
     private LoanStatus status;
+    private Long recordId;
+    private Long itemId;
+    private Long userId;
 
-    public LoanRecord(LibraryItem item, User user, String inputToSetStatus) {
-        Long itemId = item.getId(); // TODO: should be class fields
-        Long userId = user.getId();
+    public LoanRecord(LibraryItem item, User user, LoanStatus status, int dueDays) {
+        this.itemId = item.getItemId();
+        this.userId = user.getUserId();
         this.borrowDate = LocalDateTime.now();
-        // returnDate // TODO: shouldn't be set here, should be a class field set when returned
-        setStatus(inputToSetStatus);
+        this.status = status;
+        this.dueDays = dueDays;
+        this.recordId = IdGenerator.getIdForClass(LoanRecord.class);
     }
 
-    // return(ReturnDate)
-    // markAsOverdue()
+    public void setReturnDate() {
+        this.returnDate = LocalDateTime.now();
+        if (isOverdue()) {
+            setStatus(LoanStatus.OVERDUE);
+        }
+        else {
+            setStatus(LoanStatus.RETURNED);
+        }
+    }
 
-    public void setStatus(String inputToSetStatus) { // remove
-        this.status = switch (inputToSetStatus.toUpperCase().trim()) {
-            case "ACTIVE" -> LoanStatus.ACTIVE;
-            case "RETURNED" -> LoanStatus.RETURNED;
-            case "OVERDUE" -> LoanStatus.OVERDUE;
-            default -> throw new ValidationException();
-        };
+    private boolean isOverdue() {
+        return LocalDateTime.now().isAfter(LocalDateTime.now().plusDays(dueDays));
+    }
+
+    public void setStatus(LoanStatus status) {
+        this.status = status;
     }
 
     public LocalDateTime getBorrowDate() {
@@ -41,9 +52,19 @@ public class LoanRecord {
         return status;
     }
 
-    public void setReturnDate(LocalDateTime returnDate) {
-        this.returnDate = returnDate;
-    } // remove
+    public Long getItemId() {
+        return itemId;
+    }
 
+    public Long getUserId() {
+        return userId;
+    }
 
+    public int getDueDays() {
+        return dueDays;
+    }
+
+    public Long getRecordId() {
+        return recordId;
+    }
 }

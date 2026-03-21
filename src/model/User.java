@@ -1,24 +1,27 @@
 package model;
 
 import exception.ValidationException;
+import util.IdGenerator;
+
+import java.util.Comparator;
 
 public class User {
-    private static long UserIdCounter;
+    public static final Comparator<User> BY_ID = Comparator.comparing(User::getUserId);
 
-    private final Long id;
+    private final Long userId;
     private String name;
     private String email;
     private UserRole role;
 
-    public User(String name, String email, String inputToChooseRole) {
+    public User(String name, String email, UserRole role) {
         setName(name);
         setEmail(email);
-        setRole(inputToChooseRole); // TODO: fix
-        this.id = UserIdCounter++;
+        this.role = role; // TODO: fix
+        this.userId = IdGenerator.getIdForClass(User.class);
     }
 
-    public long getId() {
-        return id;
+    public long getUserId() {
+        return userId;
     }
 
     public String getName() {
@@ -47,14 +50,7 @@ public class User {
         return role;
     }
 
-    public void setRole(String inputToChooseRole) {
-        this.role = switch (inputToChooseRole.toUpperCase().trim()) {
-            case "TEACHER" -> UserRole.TEACHER;
-            case "STUDENT" -> UserRole.STUDENT;
-            case "GUEST" -> UserRole.GUEST;
-            default -> {
-                throw new ValidationException();
-            }
-        };
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 }

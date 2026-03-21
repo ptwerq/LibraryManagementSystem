@@ -5,10 +5,17 @@ import exception.ValidationException;
 import util.IdGenerator;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 
 public abstract class LibraryItem implements Borrowable {
+    public static final Comparator<LibraryItem> BY_TITLE = Comparator.comparing(LibraryItem::getTitle);
+    public static final Comparator<LibraryItem> BY_ITEM_ID = Comparator.comparing(LibraryItem::getItemId);
+    public static final Comparator<LibraryItem> BY_YEAR = Comparator.comparing(LibraryItem::getYear);
+    public static final Comparator<LibraryItem> BY_GENRE = Comparator.comparing(LibraryItem::getGenre);
 
-    private final long id;
+    public abstract int getDefaultLoanPeriod();
+
+    private final Long itemId;
     private LoanRecord currentLoan;
     private String title;
     private int year;
@@ -18,13 +25,13 @@ public abstract class LibraryItem implements Borrowable {
         setTitle(title);
         setYear(year);
         this.genre = genre;
-        this.id = IdGenerator.getIdForClass(LibraryItem.class);
+        this.itemId = IdGenerator.getIdForClass(LibraryItem.class);
     }
 
     @Override
     public void borrow(User user) {
         if (isAvailable()) {
-            currentLoan = new LoanRecord(this, user, "active");
+            currentLoan.setStatus(LoanStatus.ACTIVE);
         }
         else {
             throw new ItemUnavailableException();
@@ -35,7 +42,7 @@ public abstract class LibraryItem implements Borrowable {
     @Override
     public void returnItem() {
         if (!isAvailable()) {
-            currentLoan.setStatus("returned");
+            currentLoan.setStatus(LoanStatus.RETURNED);
         }
     }
 
@@ -62,8 +69,8 @@ public abstract class LibraryItem implements Borrowable {
         this.genre = genre;
     }
 
-    public Long getId() {
-        return id;
+    public Long getItemId() {
+        return itemId;
     }
 
     public String getTitle() {
@@ -74,14 +81,14 @@ public abstract class LibraryItem implements Borrowable {
         return year;
     }
 
-    public Genre getItemType() {
+    public Genre getGenre() {
         return genre;
     }
 
     @Override
     public String toString() {
         return "LibraryItem{" +
-                "id=" + id +
+                "id=" + itemId +
                 ", title='" + title + '\'' +
                 ", year=" + year +
                 ", genre='" + genre + '\'' +

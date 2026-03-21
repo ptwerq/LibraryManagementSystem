@@ -1,10 +1,9 @@
 package model;
 
 import exception.ValidationException;
+import util.IdGenerator;
 
 public class Book extends LibraryItem {
-    public static long IsbnCounter;
-
     private String author;
     private int pages;
     private final long isbn;
@@ -13,7 +12,12 @@ public class Book extends LibraryItem {
         super(title, year, genre);
         setAuthor(author);
         setPages(pages);
-        this.isbn = IsbnCounter++;
+        this.isbn = IdGenerator.getIdForClass(Book.class);
+    }
+
+    @Override
+    public int getDefaultLoanPeriod() {
+        return 14;
     }
 
     public String getAuthor() {

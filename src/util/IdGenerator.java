@@ -10,6 +10,6 @@ public class IdGenerator {
     private static final Map<Class<?>, Long> idGenerationMap = new HashMap<>();
 
     public static Long getIdForClass(Class<?> clazz) {
-        return idGenerationMap.compute(clazz, (_, v) -> v == null ? 1 : ++v);
+        return idGenerationMap.compute(clazz, (k, v) -> v == null ? 1 : ++v);
     }
 }

@@ -16,8 +16,8 @@ public class Main {
 
         Book book = new Book(title, year, genre, author, pages);
         Book book2 = new Book(title, year, genre, author, pages);
-        System.out.println(book.getId());
-        System.out.println(book2.getId());
+        System.out.println(book.getItemId());
+        System.out.println(book2.getItemId());
     }
 }
 
