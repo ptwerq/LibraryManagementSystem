@@ -8,14 +8,8 @@ import java.time.LocalDate;
 import java.util.Comparator;
 
 public abstract class LibraryItem implements Borrowable {
-    public static final Comparator<LibraryItem> BY_TITLE = Comparator.comparing(LibraryItem::getTitle);
-    public static final Comparator<LibraryItem> BY_ITEM_ID = Comparator.comparing(LibraryItem::getItemId);
-    public static final Comparator<LibraryItem> BY_YEAR = Comparator.comparing(LibraryItem::getYear);
-    public static final Comparator<LibraryItem> BY_GENRE = Comparator.comparing(LibraryItem::getGenre);
 
-    public abstract int getDefaultLoanPeriod();
-
-    private final Long itemId;
+    private final Long id;
     private LoanRecord currentLoan;
     private String title;
     private int year;
@@ -25,8 +19,10 @@ public abstract class LibraryItem implements Borrowable {
         setTitle(title);
         setYear(year);
         this.genre = genre;
-        this.itemId = IdGenerator.getIdForClass(LibraryItem.class);
+        this.id = IdGenerator.getIdForClass(LibraryItem.class);
     }
+
+    public abstract int getDefaultLoanPeriod();
 
     @Override
     public void borrow(User user) {
@@ -69,8 +65,8 @@ public abstract class LibraryItem implements Borrowable {
         this.genre = genre;
     }
 
-    public Long getItemId() {
-        return itemId;
+    public Long getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -88,7 +84,7 @@ public abstract class LibraryItem implements Borrowable {
     @Override
     public String toString() {
         return "LibraryItem{" +
-                "id=" + itemId +
+                "id=" + id +
                 ", title='" + title + '\'' +
                 ", year=" + year +
                 ", genre='" + genre + '\'' +

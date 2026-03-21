@@ -22,32 +22,38 @@ public class LoanService {
         this.userService = userService;
     }
 
-    public void validateBorrowingItem(Long userId, Long itemId) {
-        LibraryItem item = findItemById(itemId);
+    public void borrowItem(Long userId, Long itemId) {
+        LibraryItem item = libraryService.findItemById(itemId);
+        User user = findUserById(userId);
+
+        validateBorrowingItem(user, item);
+
+        item.borrow(user);
+        LoanRecord loanRecord = new LoanRecord(item, user, LoanStatus.ACTIVE, item.getDefaultLoanPeriod());
+        loanRecordMap.put(loanRecord.getRecordId(), loanRecord);
+    }
+
+    private void validateBorrowingItem(User user, LibraryItem item) {
         if (item == null) {
             throw new ItemNotFoundException();
         }
         if (!item.isAvailable()) {
             throw new ItemUnavailableException();
         }
-        User user = findUserById(userId);
         if (user == null) {
             throw new UserNotFoundException();
         }
         long count = loanRecordMap.values().stream()
-                .filter(r -> r.getUserId().equals(userId))
+                .filter(r -> r.getUserId().equals(user.getId()))
                 .filter(r -> !r.getStatus().equals(LoanStatus.RETURNED))
                 .count();
         if (count == 3) {
             throw new ItemUnavailableException();
         }
-        item.borrow(user);
-        LoanRecord loanRecord = new LoanRecord(item, user, LoanStatus.ACTIVE, item.getDefaultLoanPeriod());
-        loanRecordMap.put(loanRecord.getRecordId(), loanRecord);
     }
 
-    public void validateReturningItem(Long userId, Long itemId) {
-        LibraryItem item = findItemById(itemId);
+    public void validateReturningItem(Long userId, Long itemId) { // refactor
+        LibraryItem item = libraryService.findItemById(itemId);
         if (item == null) {
             throw new ItemNotFoundException();
         }
@@ -68,11 +74,7 @@ public class LoanService {
         item.returnItem();
     }
 
-    private LibraryItem findItemById(Long itemId) {
-        return libraryService.getLibraryItemMap().get(itemId);
-    }
-
     private User findUserById(Long userId) {
         return userService.getUserMap().get(userId);
-    }
+    } // refactor
 }

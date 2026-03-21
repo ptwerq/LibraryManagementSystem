@@ -16,10 +16,10 @@ public class UserService {
     }
 
     public void registerUser(User user) {
-        if (user == null || userMap.containsKey(user.getUserId())) {
+        if (user == null || userMap.containsKey(user.getId())) {
             throw new ValidationException();
         }
-        userMap.put(user.getUserId(), user);
+        userMap.put(user.getId(), user);
     }
 
     public void printAllUsers() {
@@ -29,7 +29,7 @@ public class UserService {
 
     public List<User> sortUserById() {
         return getAllUsersSorted(User.BY_ID);
-    }
+    } // refactor
 
     private List<User> getAllUsersSorted(Comparator<User> comparator) {
         return userMap.values().stream()
@@ -39,5 +39,5 @@ public class UserService {
 
     public Map<Long, User> getUserMap() {
         return userMap;
-    }
+    } // refactor
 }

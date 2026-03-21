@@ -6,9 +6,9 @@ import util.IdGenerator;
 import java.util.Comparator;
 
 public class User {
-    public static final Comparator<User> BY_ID = Comparator.comparing(User::getUserId);
+    public static final Comparator<User> BY_ID = Comparator.comparing(User::getId);
 
-    private final Long userId;
+    private final Long id;
     private String name;
     private String email;
     private UserRole role;
@@ -17,11 +17,11 @@ public class User {
         setName(name);
         setEmail(email);
         this.role = role; // TODO: fix
-        this.userId = IdGenerator.getIdForClass(User.class);
+        this.id = IdGenerator.getIdForClass(User.class);
     }
 
-    public long getUserId() {
-        return userId;
+    public long getId() {
+        return id;
     }
 
     public String getName() {

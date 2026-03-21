@@ -14,8 +14,8 @@ public class LoanRecord {
     private Long userId;
 
     public LoanRecord(LibraryItem item, User user, LoanStatus status, int dueDays) {
-        this.itemId = item.getItemId();
-        this.userId = user.getUserId();
+        this.itemId = item.getId();
+        this.userId = user.getId();
         this.borrowDate = LocalDateTime.now();
         this.status = status;
         this.dueDays = dueDays;
