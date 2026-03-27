@@ -1,5 +1,6 @@
 package model;
 
+import exception.ItemUnavailableException;
 import util.IdGenerator;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,26 @@ public class LoanRecord {
         else {
             setStatus(LoanStatus.RETURNED);
         }
+    }
+
+    public void setStatusToBorrowItem() {
+        if (isAvailable()) {
+            this.setStatus(LoanStatus.ACTIVE);
+        }
+        else {
+            throw new ItemUnavailableException();
+        }
+
+    }
+
+    public void setStatusToReturnItem() {
+        if (!isAvailable()) {
+            this.setStatus(LoanStatus.RETURNED);
+        }
+    }
+
+    public boolean isAvailable() {
+        return this.getStatus() == LoanStatus.RETURNED;
     }
 
     private boolean isOverdue() {
@@ -66,5 +87,18 @@ public class LoanRecord {
 
     public Long getRecordId() {
         return recordId;
+    }
+
+    @Override
+    public String toString() {
+        return "LoanRecord{" +
+                "borrowDate=" + borrowDate +
+                ", returnDate=" + returnDate +
+                ", dueDays=" + dueDays +
+                ", status=" + status +
+                ", recordId=" + recordId +
+                ", itemId=" + itemId +
+                ", userId=" + userId +
+                '}';
     }
 }

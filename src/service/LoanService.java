@@ -5,11 +5,10 @@ import exception.ItemUnavailableException;
 import exception.UserNotFoundException;
 import model.*;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.function.Predicate;
 
 public class LoanService {
     private final Map<Long, LoanRecord> loanRecordMap;
@@ -24,21 +23,18 @@ public class LoanService {
 
     public void borrowItem(Long userId, Long itemId) {
         LibraryItem item = libraryService.findItemById(itemId);
-        User user = findUserById(userId);
+        User user = userService.findUserById(userId);
 
         validateBorrowingItem(user, item);
 
-        item.borrow(user);
-        LoanRecord loanRecord = new LoanRecord(item, user, LoanStatus.ACTIVE, item.getDefaultLoanPeriod());
+        LoanRecord loanRecord = new LoanRecord(item, user, LoanStatus.ACTIVE, item.getDefaultLoanPeriod()); // TODO: fix
+        loanRecord.setStatusToBorrowItem();
         loanRecordMap.put(loanRecord.getRecordId(), loanRecord);
     }
 
     private void validateBorrowingItem(User user, LibraryItem item) {
         if (item == null) {
             throw new ItemNotFoundException();
-        }
-        if (!item.isAvailable()) {
-            throw new ItemUnavailableException();
         }
         if (user == null) {
             throw new UserNotFoundException();
@@ -52,29 +48,39 @@ public class LoanService {
         }
     }
 
-    public void validateReturningItem(Long userId, Long itemId) { // refactor
+    public void returnItem(Long userId, Long itemId) {
         LibraryItem item = libraryService.findItemById(itemId);
-        if (item == null) {
-            throw new ItemNotFoundException();
-        }
-        if (item.isAvailable()) {
-            throw new ItemUnavailableException();
-        }
-        User user = findUserById(userId);
-        if (user == null) {
-            throw new UserNotFoundException();
-        }
+        User user = userService.findUserById(userId);
+        validateReturningItem(user, item);
         LoanRecord loanRecord = loanRecordMap.values().stream()
-                .filter(r -> r.getUserId().equals(userId))
-                .filter(r -> r.getItemId().equals(itemId))
+                .filter(r -> r.getUserId().equals(user.getId()))
+                .filter(r -> r.getItemId().equals(item.getId()))
                 .filter(r -> r.getStatus().equals(LoanStatus.ACTIVE))
                 .findFirst()
                 .orElseThrow(ItemNotFoundException::new);
         loanRecord.setReturnDate();
-        item.returnItem();
+        loanRecord.setStatusToReturnItem();
     }
 
-    private User findUserById(Long userId) {
-        return userService.getUserMap().get(userId);
-    } // refactor
+    private void validateReturningItem(User user, LibraryItem item) {
+        if (item == null) {
+            throw new ItemNotFoundException();
+        }
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+    }
+
+    public void filterLoans(Predicate<LoanRecord> p) {
+        loanRecordMap.values().stream()
+                .filter(p)
+                .forEach(System.out::println);
+    }
+
+    @Override
+    public String toString() {
+        return "Loans = "
+                + loanRecordMap +
+                '}';
+    }
 }

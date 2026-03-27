@@ -27,9 +27,9 @@ public class UserService {
                 .forEach(System.out::println);
     }
 
-    public List<User> sortUserById() {
-        return getAllUsersSorted(User.BY_ID);
-    } // refactor
+    public User findUserById(Long userId) {
+        return userMap.get(userId);
+    }
 
     private List<User> getAllUsersSorted(Comparator<User> comparator) {
         return userMap.values().stream()
@@ -37,7 +37,10 @@ public class UserService {
                 .toList();
     }
 
-    public Map<Long, User> getUserMap() {
-        return userMap;
-    } // refactor
+    @Override
+    public String toString() {
+        return "Users = " +
+                "userMap=" + userMap +
+                '}';
+    }
 }

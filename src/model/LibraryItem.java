@@ -7,10 +7,9 @@ import util.IdGenerator;
 import java.time.LocalDate;
 import java.util.Comparator;
 
-public abstract class LibraryItem implements Borrowable {
+public abstract class LibraryItem {
 
     private final Long id;
-    private LoanRecord currentLoan;
     private String title;
     private int year;
     private Genre genre;
@@ -23,29 +22,6 @@ public abstract class LibraryItem implements Borrowable {
     }
 
     public abstract int getDefaultLoanPeriod();
-
-    @Override
-    public void borrow(User user) {
-        if (isAvailable()) {
-            currentLoan.setStatus(LoanStatus.ACTIVE);
-        }
-        else {
-            throw new ItemUnavailableException();
-        }
-
-    }
-
-    @Override
-    public void returnItem() {
-        if (!isAvailable()) {
-            currentLoan.setStatus(LoanStatus.RETURNED);
-        }
-    }
-
-    @Override
-    public boolean isAvailable() {
-        return this.currentLoan == null || currentLoan.getStatus() == LoanStatus.RETURNED;
-    }
 
     public void setTitle(String title) {
         if (title == null || title.isBlank()) {

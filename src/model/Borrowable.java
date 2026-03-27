@@ -1,7 +1,7 @@
 package model;
 
 public interface Borrowable {
-    void borrow(User user);
+    void borrow();
     void returnItem();
     boolean isAvailable();
 }

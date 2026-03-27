@@ -5,9 +5,7 @@ import model.LibraryItem;
 
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 public class LibraryService {
 
@@ -37,13 +35,17 @@ public class LibraryService {
                 .forEach(System.out::println);
     }
 
-    public List<LibraryItem> getAllItemsSorted() {
-        return getAllItemsSorted(Comparator.comparing(LibraryItem::getTitle));
+    public void getAllItemsSorted(Comparator<LibraryItem> comparator) {
+        libraryItemMap.values().stream()
+                .sorted(comparator)
+                .forEach(System.out::println);
+
     }
 
-    public List<LibraryItem> getAllItemsSorted(Comparator<LibraryItem> comparator) {
-        return libraryItemMap.values().stream()
-                .sorted(comparator)
-                .toList();
+    @Override
+    public String toString() {
+        return "Items = " +
+                "libraryItemMap=" + libraryItemMap +
+                '}';
     }
 }

@@ -3,11 +3,7 @@ package model;
 import exception.ValidationException;
 import util.IdGenerator;
 
-import java.util.Comparator;
-
 public class User {
-    public static final Comparator<User> BY_ID = Comparator.comparing(User::getId);
-
     private final Long id;
     private String name;
     private String email;
@@ -16,7 +12,7 @@ public class User {
     public User(String name, String email, UserRole role) {
         setName(name);
         setEmail(email);
-        this.role = role; // TODO: fix
+        this.role = role;
         this.id = IdGenerator.getIdForClass(User.class);
     }
 
@@ -52,5 +48,15 @@ public class User {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                '}';
     }
 }
