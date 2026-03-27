@@ -11,6 +11,8 @@ public class FileService {
     private LibraryService libraryService;
     private UserService userService;
 
+    // support reading data back into the program
+
     public FileService(LoanService loanService, LibraryService libraryService, UserService userService) throws IOException {
         this.userWriter = new FileWriter("user.txt", true);
         this.itemsWriter = new FileWriter("items.txt", true);

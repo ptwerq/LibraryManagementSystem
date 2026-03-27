@@ -4,29 +4,33 @@ import exception.ItemUnavailableException;
 import util.IdGenerator;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class LoanRecord {
+    private Long id;
     private final LocalDateTime borrowDate;
     private LocalDateTime returnDate;
     private final int dueDays;
     private LoanStatus status;
-    private Long recordId;
     private Long itemId;
     private Long userId;
 
     public LoanRecord(LibraryItem item, User user, LoanStatus status, int dueDays) {
+        this.id = IdGenerator.getIdForClass(LoanRecord.class);
         this.itemId = item.getId();
         this.userId = user.getId();
         this.borrowDate = LocalDateTime.now();
         this.status = status;
         this.dueDays = dueDays;
-        this.recordId = IdGenerator.getIdForClass(LoanRecord.class);
     }
+
+    // remove borrow method, proper remove method, scheduled overdue check
 
     public void setReturnDate() {
         this.returnDate = LocalDateTime.now();
         if (isOverdue()) {
-            setStatus(LoanStatus.OVERDUE);
+            setStatus(LoanStatus.OVERDUE); // replace with scheduled method (every night at 00:00)
         }
         else {
             setStatus(LoanStatus.RETURNED);
@@ -85,8 +89,19 @@ public class LoanRecord {
         return dueDays;
     }
 
-    public Long getRecordId() {
-        return recordId;
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof LoanRecord that)) return false;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     @Override
@@ -96,7 +111,7 @@ public class LoanRecord {
                 ", returnDate=" + returnDate +
                 ", dueDays=" + dueDays +
                 ", status=" + status +
-                ", recordId=" + recordId +
+                ", recordId=" + id +
                 ", itemId=" + itemId +
                 ", userId=" + userId +
                 '}';

@@ -1,11 +1,9 @@
 package model;
 
-import exception.ItemUnavailableException;
 import exception.ValidationException;
 import util.IdGenerator;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 
 public abstract class LibraryItem {
 

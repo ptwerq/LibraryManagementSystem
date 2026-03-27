@@ -6,7 +6,6 @@ import exception.UserNotFoundException;
 import model.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -28,8 +27,7 @@ public class LoanService {
         validateBorrowingItem(user, item);
 
         LoanRecord loanRecord = new LoanRecord(item, user, LoanStatus.ACTIVE, item.getDefaultLoanPeriod()); // TODO: fix
-        loanRecord.setStatusToBorrowItem();
-        loanRecordMap.put(loanRecord.getRecordId(), loanRecord);
+        loanRecordMap.put(loanRecord.getId(), loanRecord);
     }
 
     private void validateBorrowingItem(User user, LibraryItem item) {
