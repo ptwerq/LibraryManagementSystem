@@ -46,4 +46,12 @@ public class Book extends LibraryItem {
         return isbn;
     }
 
+    @Override
+    public String toString() {
+        return "Book{" +
+                "author='" + author + '\'' +
+                ", pages=" + pages +
+                ", isbn=" + isbn +
+                '}';
+    }
 }

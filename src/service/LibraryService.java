@@ -42,10 +42,7 @@ public class LibraryService {
 
     }
 
-    @Override
-    public String toString() {
-        return "Items = " +
-                "libraryItemMap=" + libraryItemMap +
-                '}';
+    public Map<Long, LibraryItem> getCopyOfItemMap() {
+        return new HashMap<>(libraryItemMap);
     }
 }

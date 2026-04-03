@@ -55,13 +55,4 @@ public abstract class LibraryItem {
         return genre;
     }
 
-    @Override
-    public String toString() {
-        return "LibraryItem{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", year=" + year +
-                ", genre='" + genre + '\'' +
-                '}';
-    }
 }

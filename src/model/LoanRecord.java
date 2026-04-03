@@ -1,20 +1,18 @@
 package model;
 
-import exception.ItemUnavailableException;
 import util.IdGenerator;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Objects;
 
 public class LoanRecord {
-    private Long id;
+    private final Long id;
+    private final Long itemId;
+    private final Long userId;
     private final LocalDateTime borrowDate;
     private LocalDateTime returnDate;
     private final int dueDays;
     private LoanStatus status;
-    private Long itemId;
-    private Long userId;
 
     public LoanRecord(LibraryItem item, User user, LoanStatus status, int dueDays) {
         this.id = IdGenerator.getIdForClass(LoanRecord.class);
@@ -29,36 +27,6 @@ public class LoanRecord {
 
     public void setReturnDate() {
         this.returnDate = LocalDateTime.now();
-        if (isOverdue()) {
-            setStatus(LoanStatus.OVERDUE); // replace with scheduled method (every night at 00:00)
-        }
-        else {
-            setStatus(LoanStatus.RETURNED);
-        }
-    }
-
-    public void setStatusToBorrowItem() {
-        if (isAvailable()) {
-            this.setStatus(LoanStatus.ACTIVE);
-        }
-        else {
-            throw new ItemUnavailableException();
-        }
-
-    }
-
-    public void setStatusToReturnItem() {
-        if (!isAvailable()) {
-            this.setStatus(LoanStatus.RETURNED);
-        }
-    }
-
-    public boolean isAvailable() {
-        return this.getStatus() == LoanStatus.RETURNED;
-    }
-
-    private boolean isOverdue() {
-        return LocalDateTime.now().isAfter(LocalDateTime.now().plusDays(dueDays));
     }
 
     public void setStatus(LoanStatus status) {
@@ -107,13 +75,13 @@ public class LoanRecord {
     @Override
     public String toString() {
         return "LoanRecord{" +
-                "borrowDate=" + borrowDate +
+                "id=" + id +
+                ", itemId=" + itemId +
+                ", userId=" + userId +
+                ", borrowDate=" + borrowDate +
                 ", returnDate=" + returnDate +
                 ", dueDays=" + dueDays +
                 ", status=" + status +
-                ", recordId=" + id +
-                ", itemId=" + itemId +
-                ", userId=" + userId +
                 '}';
     }
 }

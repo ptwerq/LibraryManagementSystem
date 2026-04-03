@@ -37,10 +37,7 @@ public class UserService {
                 .toList();
     }
 
-    @Override
-    public String toString() {
-        return "Users = " +
-                "userMap=" + userMap +
-                '}';
+    public Map<Long, User> getCopyOfUsersMap() {
+        return new HashMap<>(userMap);
     }
 }

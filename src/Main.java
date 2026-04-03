@@ -15,6 +15,7 @@ public class Main {
         UserService userService = new UserService();
         LoanService loanService = new LoanService(libraryService, userService);
         FileService fileService = new FileService(loanService, libraryService, userService);
+        loanService.startOverdueChecker();
 
         boolean isRunnning = true;
 
@@ -32,7 +33,8 @@ public class Main {
             System.out.println("10. Show users");
             System.out.println("11. Show active loans");
             System.out.println("12. Save data");
-            System.out.println("13. Exit");
+            System.out.println("13. Load data");
+            System.out.println("14. Exit\n");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -44,7 +46,7 @@ public class Main {
                             "genre, " +
                             "author, " +
                             "amount of pages");
-                    System.out.println("Available genres:" + Arrays.toString(Genre.values()));
+                    System.out.println("Available genres:" + Arrays.toString(Genre.values()) + "\n");
 
                     String title = scanner.nextLine();
                     int year = scanner.nextInt();
@@ -63,7 +65,7 @@ public class Main {
                             "title, " +
                             "year, " +
                             "genre, " +
-                            "publisher");
+                            "publisher" + "\n");
 
                     String title = scanner.nextLine();
                     int year = scanner.nextInt();
@@ -80,7 +82,7 @@ public class Main {
                             "name, " +
                             "email, " +
                             "role");
-                    System.out.println("Available roles: " + Arrays.toString(UserRole.values()));
+                    System.out.println("Available roles: " + Arrays.toString(UserRole.values()) + "\n");
 
                     String name = scanner.nextLine();
                     String email = scanner.nextLine();
@@ -129,9 +131,12 @@ public class Main {
                     loanService.filterLoans(p -> p.getStatus().equals(LoanStatus.ACTIVE));
                 }
                 case 12 -> {
-                    fileService.saveAll();
+                    fileService.saveAllData();
                 }
                 case 13 -> {
+                    fileService.loadAllData();
+                }
+                case 14 -> {
                     isRunnning = false;
                 }
                 default -> throw new ValidationException();

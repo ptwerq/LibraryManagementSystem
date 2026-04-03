@@ -31,4 +31,12 @@ public class Magazine extends LibraryItem {
     public long getIssueNumber() {
         return issueNumber;
     }
+
+    @Override
+    public String toString() {
+        return "Magazine{" +
+                "issueNumber=" + issueNumber +
+                ", publisher='" + publisher + '\'' +
+                '}';
+    }
 }
